@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTA PRO - FIX</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body { background: #0b0e14; color: white; font-family: sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .box { background: #161b22; border: 1px solid #333; border-radius: 12px; padding: 15px; width: 100%; max-width: 380px; box-sizing: border-box; margin-top: 10px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 10px; width: 100%; max-width: 380px; }
+        .tab-btn { background: #30363d; flex: 1; padding: 10px; border-radius: 8px; font-size: 12px; }
+        .tab-btn.active { background: #00aaff; }
+        .hidden { display: none; }
+        .result { background: #010409; padding: 10px; border-radius: 8px; font-size: 13px; color: #58a6ff; white-space: pre-wrap; margin-top: 10px; border: 1px solid #333; }
+        h2 { color: #00aaff; text-align: center; margin: 5px 0; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <div id="auth_panel" class="box">
+        <h2 id="title">ĐĂNG NHẬP UTA</h2>
+        <input type="text" id="au" placeholder="Tên tài khoản">
+        <input type="password" id="ap" placeholder="Mật khẩu">
+        <button style="background: #00aaff;" onclick="login()">Vào Hệ Thống</button>
+        <button style="background: #238636;" onclick="register()">Đăng Ký Tài Khoản Mới</button>
+    </div>
+
+    <div id="main_panel" class="hidden" style="width: 100%; max-width: 380px;">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="tab('t1')">Tạo Đơn</button>
+            <button class="tab-btn" onclick="tab('t2')">Menu Giá</button>
+            <button class="tab-btn" onclick="tab('t3')">Lịch Sử</button>
+        </div>
+
+        <div id="t1" class="box content">
+            <h2>TẠO ĐƠN MỚI</h2>
+            <input type="text" id="u" placeholder="Tên Acc Roblox">
+            <select id="sel" onchange="apply()"><option value="">-- Chọn Đơn Mẫu --</option></select>
+            <input type="text" id="d" placeholder="Nội dung đơn">
+            <input type="number" id="t" placeholder="Số tiền">
+            <button style="background: #238636;" onclick="save()">Lưu Lên Script</button>
+        </div>
+
+        <div id="t2" class="box content hidden">
+            <h2>CÀI ĐẶT MENU</h2>
+            <input type="text" id="mn" placeholder="Tên loại đơn">
+            <input type="number" id="mp" placeholder="Giá tiền">
+            <button style="background: #8957e5;" onclick="addM()">Thêm Vào Menu</button>
+        </div>
+
+        <div id="t3" class="box content hidden">
+            <h2>TỔNG KẾT</h2>
+            <button style="background: #00aaff;" onclick="history()">Cập Nhật Danh Sách</button>
+            <div id="out" class="result">Đang chờ...</div>
+            <input type="text" id="du" placeholder="Tên acc cần xóa" style="margin-top:20px;">
+            <button style="background: #da3633;" onclick="del()">Xóa Acc</button>
+        </div>
+        
+        <button onclick="location.reload()" style="background:none; color:#8b949e; font-size:12px;">Đăng xuất</button>
+    </div>
+
+    <script>
+        const conf = { databaseURL: "https://an1324-ee78b-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+        firebase.initializeApp(conf);
+        const db = firebase.database();
+
+        function register() {
+            const u = document.getElementById('au').value, p = document.getElementById('ap').value;
+            if(!u || !p) return alert("Nhập đủ tên và mật khẩu!");
+            db.ref('Users/'+u).set({p: p}).then(() => alert("Đăng ký THÀNH CÔNG! Giờ hãy bấm Vào Hệ Thống."));
+        }
+
+        function login() {
+            const u = document.getElementById('au').value, p = document.getElementById('ap').value;
+            db.ref('Users/'+u).once('value', s => {
+                if(s.val() && s.val().p === p) {
+                    document.getElementById('auth_panel').classList.add('hidden');
+                    document.getElementById('main_panel').classList.remove('hidden');
+                    loadM();
+                } else alert("Sai tài khoản hoặc mật khẩu!");
+            });
+        }
+
+        function tab(id) {
+            document.querySelectorAll('.content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.remove('hidden');
+            event.currentTarget.classList.add('active');
+        }
+
+        function addM() {
+            let n = document.getElementById('mn').value, p = document.getElementById('mp').value;
+            if(n && p) db.ref('Menu/'+n).set({g: Number(p)}).then(() => { alert("Đã thêm!"); loadM(); });
+        }
+
+        function loadM() {
+            db.ref('Menu').on('value', s => {
+                let e = document.getElementById('sel');
+                e.innerHTML = '<option value="">-- Chọn Đơn Mẫu --</option>';
+                for(let k in s.val()) e.innerHTML += `<option value="${k}" data-g="${s.val()[k].g}">${k}</option>`;
+            });
+        }
+
+        function apply() {
+            let e = document.getElementById('sel'), o = e.options[e.selectedIndex];
+            if(e.value) { document.getElementById('d').value = e.value; document.getElementById('t').value = o.getAttribute('data-g'); }
+        }
+
+        function save() {
+            let u = document.getElementById('u').value, d = document.getElementById('d').value, t = document.getElementById('t').value;
+            if(u) db.ref('Orders/'+u).set({d: d, t: Number(t), st: "Đang cày"}).then(() => alert("Đã lưu đơn!"));
+        }
+
+        function history() {
+            db.ref('Orders').once('value', s => {
+                let txt = "📋 ĐƠN HIỆN CÓ:\n", sum = 0;
+                for(let k in s.val()) {
+                    txt += `- ${k}: ${s.val()[k].d} (${s.val()[k].t.toLocaleString()}đ)\n`;
+                    sum += s.val()[k].t;
+                }
+                document.getElementById('out').innerText = txt + "\n💰 TỔNG CỘNG: " + sum.toLocaleString() + " VNĐ";
+            });
+        }
+
+        function del() {
+            let u = document.getElementById('du').value;
+            if(u) db.ref('Orders/'+u).remove().then(() => alert("Đã xóa đơn!"));
+        }
+    </script>
+</body>
+</html>
