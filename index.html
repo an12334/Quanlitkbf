@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Đơn Cày Roblox - Đăng Nhập</title>
+    <title>Quản Lý Đơn Cày Roblox - Đăng Nhập / Đăng Ký</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -56,7 +56,7 @@
             display: none;
         }
 
-        .login-box {
+        .auth-box {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 20px;
@@ -65,6 +65,8 @@
             max-width: 95%;
             box-shadow: var(--shadow), 0 0 60px rgba(233, 68, 96, 0.1);
             animation: slideUp 0.5s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         @keyframes slideUp {
@@ -87,12 +89,12 @@
             }
         }
 
-        .login-box .login-icon {
+        .auth-box .auth-icon {
             text-align: center;
             margin-bottom: 20px;
         }
 
-        .login-box .login-icon i {
+        .auth-box .auth-icon i {
             font-size: 3rem;
             color: var(--accent);
             background: rgba(233, 68, 96, 0.1);
@@ -100,26 +102,73 @@
             height: 80px;
             line-height: 80px;
             border-radius: 50%;
+            display: inline-block;
         }
 
-        .login-box h2 {
+        .auth-box h2 {
             text-align: center;
             margin-bottom: 8px;
             font-size: 1.6rem;
         }
 
-        .login-box .login-subtitle {
+        .auth-box .auth-subtitle {
             text-align: center;
             color: var(--text-secondary);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 0.9rem;
         }
 
-        .login-box .form-group {
-            margin-bottom: 20px;
+        /* Chuyển đổi form */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            padding: 4px;
+            border: 1px solid var(--border);
         }
 
-        .login-box .form-group label {
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            font-family: inherit;
+        }
+
+        .auth-tab.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(233, 68, 96, 0.25);
+        }
+
+        .auth-tab:hover:not(.active) {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Form container */
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form .form-group {
+            margin-bottom: 18px;
+        }
+
+        .auth-form .form-group label {
             display: block;
             margin-bottom: 8px;
             color: var(--text-secondary);
@@ -127,11 +176,11 @@
             font-weight: 500;
         }
 
-        .login-box .form-group .input-wrapper {
+        .auth-form .form-group .input-wrapper {
             position: relative;
         }
 
-        .login-box .form-group .input-wrapper i {
+        .auth-form .form-group .input-wrapper i {
             position: absolute;
             left: 16px;
             top: 50%;
@@ -139,9 +188,10 @@
             color: var(--text-secondary);
             font-size: 1rem;
             transition: all 0.3s ease;
+            z-index: 1;
         }
 
-        .login-box .form-group input {
+        .auth-form .form-group input {
             width: 100%;
             padding: 14px 16px 14px 45px;
             background: var(--bg-primary);
@@ -153,17 +203,18 @@
             font-family: inherit;
         }
 
-        .login-box .form-group input:focus {
+        .auth-form .form-group input:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(233, 68, 96, 0.1);
         }
 
-        .login-box .form-group input:focus+i {
+        .auth-form .form-group input:focus~i,
+        .auth-form .form-group input:focus+i {
             color: var(--accent);
         }
 
-        .login-box .login-btn {
+        .auth-submit-btn {
             width: 100%;
             padding: 14px;
             background: var(--gradient);
@@ -176,14 +227,18 @@
             transition: all 0.3s ease;
             margin-top: 10px;
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .login-box .login-btn:hover {
+        .auth-submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(233, 68, 96, 0.4);
         }
 
-        .login-error {
+        .auth-error {
             color: #e74c3c;
             text-align: center;
             margin-top: 12px;
@@ -191,9 +246,21 @@
             display: none;
         }
 
-        .login-error.show {
+        .auth-error.show {
             display: block;
             animation: shake 0.5s ease;
+        }
+
+        .auth-success {
+            color: var(--success);
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .auth-success.show {
+            display: block;
         }
 
         @keyframes shake {
@@ -209,7 +276,18 @@
             }
         }
 
-        /* ============ MAIN APP (ẩn ban đầu) ============ */
+        .auth-hint {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+        }
+
+        .auth-hint i {
+            color: var(--accent);
+        }
+
+        /* ============ MAIN APP ============ */
         .main-app {
             display: none;
         }
@@ -348,6 +426,9 @@
             transition: all 0.3s ease;
             font-size: 0.85rem;
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn-logout:hover {
@@ -404,17 +485,6 @@
 
         .tab-content.active {
             display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         /* Card */
@@ -758,7 +828,7 @@
             .total-card .total-amount {
                 font-size: 2rem;
             }
-            .login-box {
+            .auth-box {
                 padding: 30px 20px;
             }
         }
@@ -766,35 +836,75 @@
 </head>
 <body>
 
-    <!-- ============ LOGIN OVERLAY ============ -->
+    <!-- ============ LOGIN / REGISTER OVERLAY ============ -->
     <div class="login-overlay" id="loginOverlay">
-        <div class="login-box">
-            <div class="login-icon">
+        <div class="auth-box">
+            <div class="auth-icon">
                 <i class="fas fa-robot"></i>
             </div>
-            <h2>Đăng Nhập</h2>
-            <p class="login-subtitle">Quản Lý Đơn Cày Roblox</p>
-            <div class="form-group">
-                <label>Tên đăng nhập</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="loginUsername" placeholder="Nhập tên đăng nhập..." autocomplete="off">
-                </div>
+            <h2>Quản Lý Đơn Cày Roblox</h2>
+            <p class="auth-subtitle">Đăng nhập hoặc tạo tài khoản mới</p>
+
+            <!-- Tabs Đăng nhập / Đăng ký -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-auth="login">Đăng Nhập</button>
+                <button class="auth-tab" data-auth="register">Đăng Ký</button>
             </div>
-            <div class="form-group">
-                <label>Mật khẩu</label>
-                <div class="input-wrapper">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." autocomplete="off">
+
+            <!-- Form Đăng Nhập -->
+            <div class="auth-form active" id="formLogin">
+                <div class="form-group">
+                    <label>Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Nhập tên đăng nhập..." autocomplete="off">
+                    </div>
                 </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." autocomplete="off">
+                    </div>
+                </div>
+                <button class="auth-submit-btn" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+                </button>
+                <div class="auth-error" id="loginError">Tên đăng nhập hoặc mật khẩu không đúng!</div>
+                <p class="auth-hint">
+                    <i class="fas fa-info-circle"></i> Mặc định: admin / admin123
+                </p>
             </div>
-            <button class="login-btn" onclick="handleLogin()">
-                <i class="fas fa-sign-in-alt"></i> Đăng Nhập
-            </button>
-            <div class="login-error" id="loginError">Tên đăng nhập hoặc mật khẩu không đúng!</div>
-            <p style="text-align: center; margin-top: 15px; color: var(--text-secondary); font-size: 0.8rem;">
-                <i class="fas fa-info-circle"></i> Mặc định: admin / admin123
-            </p>
+
+            <!-- Form Đăng Ký -->
+            <div class="auth-form" id="formRegister">
+                <div class="form-group">
+                    <label>Tên đăng nhập</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="regUsername" placeholder="Chọn tên đăng nhập..." autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Tạo mật khẩu..." autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="regConfirmPassword" placeholder="Nhập lại mật khẩu..." autocomplete="off">
+                    </div>
+                </div>
+                <button class="auth-submit-btn" onclick="handleRegister()">
+                    <i class="fas fa-user-plus"></i> Đăng Ký
+                </button>
+                <div class="auth-error" id="registerError"></div>
+                <div class="auth-success" id="registerSuccess"></div>
+            </div>
         </div>
     </div>
 
@@ -862,7 +972,6 @@
                             </select>
                         </div>
                     </div>
-                    <!-- Quick packages sẽ được chèn vào đây -->
                     <div class="quick-packages" id="quickPackages"></div>
                     <div class="price-display">
                         <i class="fas fa-tag"></i>
@@ -874,7 +983,6 @@
                     </button>
                 </div>
 
-                <!-- Danh sách đơn đã tạo -->
                 <div class="card">
                     <h2><i class="fas fa-list"></i> Danh Sách Đơn Cày</h2>
                     <div class="table-container">
@@ -922,7 +1030,6 @@
                     </button>
                 </div>
 
-                <!-- Danh sách gói cày -->
                 <div class="card">
                     <h2><i class="fas fa-list-alt"></i> Danh Sách Gói Cày</h2>
                     <div class="table-container">
@@ -992,25 +1099,68 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // ============ DỮ LIỆU NGƯỜI DÙNG ============
+        // Lưu trữ tài khoản trong localStorage (demo)
+        function getUsers() {
+            const users = localStorage.getItem('cayUsers');
+            if (users) {
+                return JSON.parse(users);
+            }
+            // Tài khoản mặc định
+            const defaultUsers = [
+                { username: 'admin', password: 'admin123' }
+            ];
+            localStorage.setItem('cayUsers', JSON.stringify(defaultUsers));
+            return defaultUsers;
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('cayUsers', JSON.stringify(users));
+        }
+
         // ============ BIẾN TOÀN CỤC ============
-        // Tài khoản đăng nhập mặc định
-        const DEFAULT_USERNAME = 'admin';
-        const DEFAULT_PASSWORD = 'admin123';
         let isLoggedIn = false;
         let currentUser = '';
 
-        // Dữ liệu
+        // Dữ liệu đơn cày
         let packages = JSON.parse(localStorage.getItem('cayPackages')) || [];
         let orders = JSON.parse(localStorage.getItem('cayOrders')) || [];
+
+        // ============ AUTH TABS ============
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetAuth = this.getAttribute('data-auth');
+
+                // Cập nhật trạng thái active cho tab
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Ẩn/hiện form
+                document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+                if (targetAuth === 'login') {
+                    document.getElementById('formLogin').classList.add('active');
+                    document.getElementById('loginUsername').focus();
+                } else {
+                    document.getElementById('formRegister').classList.add('active');
+                    document.getElementById('regUsername').focus();
+                }
+
+                // Xóa thông báo lỗi/thành công
+                document.querySelectorAll('.auth-error, .auth-success').forEach(el => el.classList.remove(
+                    'show'));
+            });
+        });
 
         // ============ LOGIN ============
         function handleLogin() {
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
             const errorEl = document.getElementById('loginError');
+            const users = getUsers();
 
-            if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
-                // Đăng nhập thành công
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
                 isLoggedIn = true;
                 currentUser = username;
                 errorEl.classList.remove('show');
@@ -1020,7 +1170,6 @@
                 initApp();
                 showToast('Đăng nhập thành công! Chào mừng ' + username, 'success');
             } else {
-                // Sai thông tin
                 errorEl.classList.add('show');
                 document.getElementById('loginPassword').value = '';
                 document.getElementById('loginPassword').focus();
@@ -1030,13 +1179,76 @@
             }
         }
 
-        // Cho phép nhấn Enter để đăng nhập
+        // ============ REGISTER ============
+        function handleRegister() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+
+            // Reset thông báo
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+            errorEl.textContent = '';
+
+            // Validate
+            if (!username || username.length < 3) {
+                errorEl.textContent = 'Tên đăng nhập phải có ít nhất 3 ký tự!';
+                errorEl.classList.add('show');
+                return;
+            }
+            if (!password || password.length < 6) {
+                errorEl.textContent = 'Mật khẩu phải có ít nhất 6 ký tự!';
+                errorEl.classList.add('show');
+                return;
+            }
+            if (password !== confirmPassword) {
+                errorEl.textContent = 'Mật khẩu xác nhận không khớp!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            const users = getUsers();
+            const existingUser = users.find(u => u.username === username);
+            if (existingUser) {
+                errorEl.textContent = 'Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Thêm user mới
+            users.push({ username, password });
+            saveUsers(users);
+
+            // Hiển thị thành công
+            successEl.textContent = 'Đăng ký thành công! Đang chuyển sang đăng nhập...';
+            successEl.classList.add('show');
+
+            // Xóa form đăng ký
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regConfirmPassword').value = '';
+
+            // Tự động chuyển sang tab Đăng nhập sau 1.5s
+            setTimeout(() => {
+                document.querySelector('.auth-tab[data-auth="login"]').click();
+                document.getElementById('loginUsername').value = username;
+                document.getElementById('loginPassword').focus();
+                successEl.classList.remove('show');
+                showToast('Đăng ký thành công! Vui lòng đăng nhập.', 'success');
+            }, 1500);
+        }
+
+        // Nhấn Enter để submit form auth
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !isLoggedIn) {
-                handleLogin();
-            }
-            if (e.key === 'Enter' && isLoggedIn) {
-                // Có thể dùng để submit form khác nếu cần
+                const activeForm = document.querySelector('.auth-form.active');
+                if (activeForm.id === 'formLogin') {
+                    handleLogin();
+                } else if (activeForm.id === 'formRegister') {
+                    handleRegister();
+                }
             }
         });
 
@@ -1054,6 +1266,8 @@
                 document.getElementById('loginUsername').value = '';
                 document.getElementById('loginPassword').value = '';
                 document.getElementById('loginUsername').focus();
+                // Reset về tab đăng nhập
+                document.querySelector('.auth-tab[data-auth="login"]').click();
                 showToast('Đã đăng xuất!');
             }
         }
@@ -1401,10 +1615,6 @@
             if (headerTotalEl) headerTotalEl.textContent = total.toLocaleString() + ' VNĐ';
             if (totalOrdersEl) totalOrdersEl.textContent = orders.length;
         }
-
-        // ============ KIỂM TRA ĐĂNG NHẬP KHI LOAD TRANG ============
-        // Nếu đã đăng nhập trước đó (có thể lưu session), tự động bỏ qua login
-        // Hiện tại mỗi lần load trang đều phải đăng nhập lại
     </script>
 </body>
 </html>
