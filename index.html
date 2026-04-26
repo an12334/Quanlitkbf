@@ -3,362 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Đơn Cày Roblox - Đăng Nhập / Đăng Ký</title>
+    <title>Quản Lý Đơn Cày Roblox</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-card: #0f3460;
-            --accent: #e94560;
-            --accent-hover: #ff6b6b;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --border: #2a2a4a;
-            --success: #00c853;
-            --warning: #ffc107;
-            --gradient: linear-gradient(135deg, #e94560, #c23152);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-dark: #0f0f1e;
+            --glass-bg: rgba(30, 30, 45, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a8a8b8;
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --card-bg: rgba(20, 20, 35, 0.8);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* ============ LOGIN OVERLAY ============ */
-        .login-overlay {
+        body::before,
+        body::after {
+            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 10, 30, 0.95);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .login-overlay.hidden {
-            display: none;
-        }
-
-        .auth-box {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
-            width: 420px;
-            max-width: 95%;
-            box-shadow: var(--shadow), 0 0 60px rgba(233, 68, 96, 0.1);
-            animation: slideUp 0.5s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .auth-box .auth-icon {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .auth-box .auth-icon i {
-            font-size: 3rem;
-            color: var(--accent);
-            background: rgba(233, 68, 96, 0.1);
-            width: 80px;
-            height: 80px;
-            line-height: 80px;
             border-radius: 50%;
-            display: inline-block;
-        }
-
-        .auth-box h2 {
-            text-align: center;
-            margin-bottom: 8px;
-            font-size: 1.6rem;
-        }
-
-        .auth-box .auth-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 25px;
-            font-size: 0.9rem;
-        }
-
-        /* Chuyển đổi form */
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 25px;
-            background: var(--bg-primary);
-            border-radius: 10px;
-            padding: 4px;
-            border: 1px solid var(--border);
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            color: var(--text-secondary);
-            background: transparent;
-            border: none;
-            font-family: inherit;
-        }
-
-        .auth-tab.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 4px 12px rgba(233, 68, 96, 0.25);
-        }
-
-        .auth-tab:hover:not(.active) {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* Form container */
-        .auth-form {
-            display: none;
-            animation: fadeIn 0.35s ease;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .auth-form .form-group {
-            margin-bottom: 18px;
-        }
-
-        .auth-form .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .auth-form .form-group .input-wrapper {
-            position: relative;
-        }
-
-        .auth-form .form-group .input-wrapper i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            z-index: 1;
-        }
-
-        .auth-form .form-group input {
-            width: 100%;
-            padding: 14px 16px 14px 45px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .auth-form .form-group input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(233, 68, 96, 0.1);
-        }
-
-        .auth-form .form-group input:focus~i,
-        .auth-form .form-group input:focus+i {
-            color: var(--accent);
-        }
-
-        .auth-submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--gradient);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .auth-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(233, 68, 96, 0.4);
-        }
-
-        .auth-error {
-            color: #e74c3c;
-            text-align: center;
-            margin-top: 12px;
-            font-size: 0.85rem;
-            display: none;
-        }
-
-        .auth-error.show {
-            display: block;
-            animation: shake 0.5s ease;
-        }
-
-        .auth-success {
-            color: var(--success);
-            text-align: center;
-            margin-top: 12px;
-            font-size: 0.85rem;
-            display: none;
-        }
-
-        .auth-success.show {
-            display: block;
-        }
-
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-8px);
-            }
-            75% {
-                transform: translateX(8px);
-            }
-        }
-
-        .auth-hint {
-            text-align: center;
-            margin-top: 15px;
-            color: var(--text-secondary);
-            font-size: 0.78rem;
-        }
-
-        .auth-hint i {
-            color: var(--accent);
-        }
-
-        /* ============ MAIN APP ============ */
-        .main-app {
-            display: none;
-        }
-
-        .main-app.visible {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* ============ NỀN HẠT ============ */
-        .bg-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            filter: blur(120px);
+            opacity: 0.25;
+            animation: float 20s infinite ease-in-out;
             z-index: 0;
         }
 
-        .particle {
-            position: absolute;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: floatUp linear infinite;
-            opacity: 0.3;
+        body::before {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+            top: -300px;
+            left: -300px;
         }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1);
-                opacity: 0;
-            }
+        body::after {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
+            bottom: -250px;
+            right: -250px;
+            animation-delay: -7s;
         }
 
-        /* Container chính */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, -60px) scale(1.15); }
+            66% { transform: translate(-40px, 40px) scale(0.85); }
+        }
+
+        /* ============ TRANG ĐĂNG NHẬP ============ */
+        #loginPage {
+            perspective: 1000px;
+            animation: containerFadeIn 0.8s ease-out;
+            width: 100%;
+            max-width: 500px;
             padding: 20px;
             position: relative;
             z-index: 1;
         }
 
-        /* Header */
-        .header {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 25px 30px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            animation: slideDown 0.5s ease;
+        @keyframes containerFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
-        @keyframes slideDown {
+        .login-window {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: visible;
+            transition: transform 0.3s ease;
+        }
+
+        .login-window:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-window-content {
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container {
+            position: relative;
+            min-height: 380px;
+        }
+
+        .form {
+            position: absolute;
+            width: 100%;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .form.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: all;
+        }
+
+        .form.inactive-left {
+            opacity: 0;
+            transform: translateX(-100%) scale(0.8);
+            pointer-events: none;
+        }
+
+        .form.inactive-right {
+            opacity: 0;
+            transform: translateX(100%) scale(0.8);
+            pointer-events: none;
+        }
+
+        .login-window h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #a8a8b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleSlideIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes titleSlideIn {
             from {
                 opacity: 0;
                 transform: translateY(-20px);
@@ -369,440 +175,20 @@
             }
         }
 
-        .header-left h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 5px;
-        }
-
-        .header-left .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .total-earning {
-            background: var(--gradient);
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            border: 1px solid var(--border);
-        }
-
-        .user-info i {
-            color: var(--accent);
-        }
-
-        .btn-logout {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-logout:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(233, 68, 96, 0.05);
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 25px;
-            background: var(--bg-secondary);
-            padding: 5px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: inherit;
-        }
-
-        .tab-btn.active {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 4px 15px rgba(233, 68, 96, 0.3);
-        }
-
-        .tab-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-        }
-
-        /* Tab content */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Card */
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-        }
-
-        .card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-primary);
-        }
-
-        .card h2 i {
-            color: var(--accent);
-        }
-
-        /* Form */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .input-group {
+            position: relative;
             margin-bottom: 20px;
+            animation: inputSlideIn 0.6s ease-out both;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .input-group:nth-child(2) { animation-delay: 0.3s; }
+        .input-group:nth-child(3) { animation-delay: 0.4s; }
+        .input-group:nth-child(4) { animation-delay: 0.5s; }
 
-        .form-group label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .form-group label i {
-            color: var(--accent);
-            font-size: 0.85rem;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 12px 16px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(233, 68, 96, 0.1);
-        }
-
-        .form-group select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            padding-right: 40px;
-        }
-
-        .form-group select option {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-        }
-
-        /* Giá hiển thị */
-        .price-display {
-            background: rgba(233, 68, 96, 0.1);
-            border: 1px dashed var(--accent);
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.1rem;
-        }
-
-        .price-display .price-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(233, 68, 96, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(233, 68, 96, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--accent);
-        }
-
-        .btn-danger {
-            background: #c0392b;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #e74c3c;
-        }
-
-        .btn-sm {
-            padding: 8px 14px;
-            font-size: 0.8rem;
-        }
-
-        /* Table */
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        table th,
-        table td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-
-        table th {
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        table tbody tr {
-            transition: all 0.3s ease;
-        }
-
-        table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .status-active {
-            color: var(--success);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-active::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            color: var(--border);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        /* Tổng tiền card */
-        .total-card {
-            background: var(--bg-card);
-            border: 1px solid var(--accent);
-            border-radius: 16px;
-            padding: 25px 30px;
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-
-        .total-card .total-label {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-
-        .total-card .total-amount {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Package menu nhanh */
-        .quick-packages {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin: 15px 0;
-        }
-
-        .quick-package-item {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .quick-package-item:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .quick-package-item.selected {
-            border-color: var(--accent);
-            background: rgba(233, 68, 96, 0.1);
-        }
-
-        .quick-package-item .package-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .quick-package-item .package-price {
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            z-index: 999;
-            animation: slideInRight 0.3s ease;
-            display: none;
-        }
-
-        .toast.show {
-            display: block;
-        }
-
-        .toast.success {
-            border-color: var(--success);
-        }
-
-        .toast.error {
-            border-color: #e74c3c;
-        }
-
-        @keyframes slideInRight {
+        @keyframes inputSlideIn {
             from {
                 opacity: 0;
-                transform: translateX(100px);
+                transform: translateX(-30px);
             }
             to {
                 opacity: 1;
@@ -810,811 +196,1081 @@
             }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 14px 45px 14px 20px;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-group:focus-within .input-icon {
+            color: var(--primary);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 20px 0;
+            animation: inputSlideIn 0.6s ease-out 0.6s both;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            animation: buttonSlideIn 0.6s ease-out 0.7s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        @keyframes buttonSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            .form-grid {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .switch-text {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            animation: inputSlideIn 0.6s ease-out 0.8s both;
+        }
+
+        .switch-link {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .switch-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .switch-link:hover::after {
+            width: 100%;
+        }
+
+        .switch-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .error-message {
+            color: var(--danger);
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* ============ TRANG QUẢN LÝ ============ */
+        #mainPage {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            margin: 20px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-greeting {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 22px;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 22px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .total-bar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 22px 30px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .total-bar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+        }
+
+        .total-label {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .total-label i {
+            color: #fbbf24;
+            font-size: 1.6rem;
+        }
+
+        .total-amount {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-2col {
                 grid-template-columns: 1fr;
             }
-            .tabs {
-                flex-direction: column;
-            }
-            table {
-                font-size: 0.8rem;
-            }
-            .total-card .total-amount {
-                font-size: 2rem;
-            }
-            .auth-box {
-                padding: 30px 20px;
-            }
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 28px 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 22px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .card-title i {
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        .order-list {
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .order-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .order-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .order-list::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .order-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            animation: fadeIn 0.4s ease;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .order-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        .order-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .order-name {
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .order-account {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .order-price {
+            font-weight: 700;
+            color: #fbbf24;
+            font-size: 1.2rem;
+            white-space: nowrap;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #ef4444;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: scale(1.05);
+        }
+
+        .empty-message {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 25px;
+            font-style: italic;
+        }
+
+        .menu-item-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 24px;
+            color: white;
+            font-weight: 500;
+            animation: slideInRight 0.4s ease, fadeOut 0.4s ease 2.5s forwards;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            max-width: 350px;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            #loginPage { padding: 10px; }
+            .login-window-content { padding: 35px 25px; }
+            .login-window h2 { font-size: 1.8rem; margin-bottom: 25px; }
+            .input-group { margin-bottom: 16px; }
+            .input-group input,
+            .input-group select { padding: 12px 40px 12px 16px; font-size: 14px; }
+            .btn { padding: 13px; font-size: 15px; }
+            .form-container { min-height: 400px; }
+            .total-amount { font-size: 2rem; }
+            .glass-card { padding: 20px 18px; }
+            .card-title { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
-
-    <!-- ============ LOGIN / REGISTER OVERLAY ============ -->
-    <div class="login-overlay" id="loginOverlay">
-        <div class="auth-box">
-            <div class="auth-icon">
-                <i class="fas fa-robot"></i>
-            </div>
-            <h2>Quản Lý Đơn Cày Roblox</h2>
-            <p class="auth-subtitle">Đăng nhập hoặc tạo tài khoản mới</p>
-
-            <!-- Tabs Đăng nhập / Đăng ký -->
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-auth="login">Đăng Nhập</button>
-                <button class="auth-tab" data-auth="register">Đăng Ký</button>
-            </div>
-
-            <!-- Form Đăng Nhập -->
-            <div class="auth-form active" id="formLogin">
-                <div class="form-group">
-                    <label>Tên đăng nhập</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="loginUsername" placeholder="Nhập tên đăng nhập..." autocomplete="off">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." autocomplete="off">
-                    </div>
-                </div>
-                <button class="auth-submit-btn" onclick="handleLogin()">
-                    <i class="fas fa-sign-in-alt"></i> Đăng Nhập
-                </button>
-                <div class="auth-error" id="loginError">Tên đăng nhập hoặc mật khẩu không đúng!</div>
-                <p class="auth-hint">
-                    <i class="fas fa-info-circle"></i> Mặc định: admin / admin123
-                </p>
-            </div>
-
-            <!-- Form Đăng Ký -->
-            <div class="auth-form" id="formRegister">
-                <div class="form-group">
-                    <label>Tên đăng nhập</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="regUsername" placeholder="Chọn tên đăng nhập..." autocomplete="off">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="regPassword" placeholder="Tạo mật khẩu..." autocomplete="off">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Xác nhận mật khẩu</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="regConfirmPassword" placeholder="Nhập lại mật khẩu..." autocomplete="off">
-                    </div>
-                </div>
-                <button class="auth-submit-btn" onclick="handleRegister()">
-                    <i class="fas fa-user-plus"></i> Đăng Ký
-                </button>
-                <div class="auth-error" id="registerError"></div>
-                <div class="auth-success" id="registerSuccess"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ MAIN APP ============ -->
-    <div class="main-app" id="mainApp">
-        <!-- Nền hạt -->
-        <div class="bg-particles" id="particles"></div>
-
-        <div class="main-container">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-left">
-                    <h1>✨ Quản Lý Đơn Cày Roblox</h1>
-                    <p class="subtitle">Hệ thống quản lý đơn cày tự động</p>
-                </div>
-                <div class="header-right">
-                    <div class="user-info">
-                        <i class="fas fa-user-circle"></i>
-                        <span id="currentUser">admin</span>
-                    </div>
-                    <div class="total-earning">
-                        <i class="fas fa-coins"></i>
-                        <span>Tổng: <strong id="headerTotal">0 VNĐ</strong></span>
-                    </div>
-                    <button class="btn-logout" onclick="handleLogout()" title="Đăng xuất">
-                        <i class="fas fa-sign-out-alt"></i> Thoát
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="tab-create-order">
-                    <i class="fas fa-plus-circle"></i> Nhập Đơn Cày
-                </button>
-                <button class="tab-btn" data-tab="tab-create-package">
-                    <i class="fas fa-box"></i> Tạo Đơn (Menu)
-                </button>
-                <button class="tab-btn" data-tab="tab-total">
-                    <i class="fas fa-chart-bar"></i> Tổng Tiền Đã Cày
-                </button>
-            </div>
-
-            <!-- Tab 1: Nhập đơn cày -->
-            <div class="tab-content active" id="tab-create-order">
-                <div class="card">
-                    <h2><i class="fas fa-file-invoice"></i> Nhập Đơn Cày Mới</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> Tên tài khoản Roblox</label>
-                            <input type="text" id="robloxUsername" placeholder="Nhập tên tài khoản...">
+    <!-- ==================== TRANG ĐĂNG NHẬP ==================== -->
+    <div id="loginPage">
+        <div class="login-window">
+            <div class="login-window-content">
+                <div class="form-container">
+                    <form class="form active" id="loginForm">
+                        <h2>Đăng Nhập</h2>
+                        <div class="error-message" id="loginError">Tên đăng nhập hoặc mật khẩu không đúng!</div>
+                        
+                        <div class="input-group">
+                            <input type="text" id="loginUsername" placeholder="Tên đăng nhập" required>
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                         </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> Mật khẩu</label>
-                            <input type="password" id="robloxPassword" placeholder="Nhập mật khẩu...">
+                        
+                        <div class="input-group">
+                            <input type="password" id="loginPassword" placeholder="Mật khẩu" required>
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
                         </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-tag"></i> Tên đơn cày</label>
-                            <input type="text" id="orderName" placeholder="Ví dụ: Cày rank, Farm tiền...">
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Ghi nhớ đăng nhập</label>
                         </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-box"></i> Chọn đơn menu nhanh</label>
-                            <select id="packageSelect" onchange="selectPackage()">
-                                <option value="">-- Chọn gói cày --</option>
-                            </select>
+                        
+                        <button type="submit" class="btn">Đăng Nhập</button>
+                        
+                        <div class="switch-text">
+                            Chưa có tài khoản? <a class="switch-link" onclick="switchToRegister()">Đăng ký ngay</a>
                         </div>
-                    </div>
-                    <div class="quick-packages" id="quickPackages"></div>
-                    <div class="price-display">
-                        <i class="fas fa-tag"></i>
-                        <span>Giá tiền:</span>
-                        <span class="price-value" id="currentPrice">0 VNĐ</span>
-                    </div>
-                    <button class="btn btn-primary" onclick="createOrder()">
-                        <i class="fas fa-plus"></i> Tạo Đơn Cày
-                    </button>
-                </div>
-
-                <div class="card">
-                    <h2><i class="fas fa-list"></i> Danh Sách Đơn Cày</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Tên TK</th>
-                                    <th>Tên Đơn</th>
-                                    <th>Giá Tiền</th>
-                                    <th>Trạng Thái</th>
-                                    <th>Thời Gian</th>
-                                    <th>Hành Động</th>
-                                </tr>
-                            </thead>
-                            <tbody id="orderTableBody">
-                                <tr>
-                                    <td colspan="7" class="empty-state">
-                                        <i class="fas fa-inbox"></i>
-                                        <p>Chưa có đơn cày nào</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab 2: Tạo đơn (Menu) -->
-            <div class="tab-content" id="tab-create-package">
-                <div class="card">
-                    <h2><i class="fas fa-box-open"></i> Tạo Gói Cày Mới</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label><i class="fas fa-tag"></i> Tên gói cày</label>
-                            <input type="text" id="packageName" placeholder="Nhập tên gói cày...">
+                    </form>
+                    
+                    <form class="form inactive-right" id="registerForm">
+                        <h2>Đăng Ký</h2>
+                        <div class="error-message" id="registerError">Vui lòng kiểm tra lại thông tin!</div>
+                        
+                        <div class="input-group">
+                            <input type="text" id="regUsername" placeholder="Tên đăng nhập" required>
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                         </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-dollar-sign"></i> Giá tiền (VNĐ)</label>
-                            <input type="number" id="packagePrice" placeholder="Nhập giá tiền..." min="0">
+                        
+                        <div class="input-group">
+                            <input type="password" id="regPassword" placeholder="Mật khẩu" required>
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
                         </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="createPackage()">
-                        <i class="fas fa-save"></i> Lưu Gói Cày
-                    </button>
-                </div>
-
-                <div class="card">
-                    <h2><i class="fas fa-list-alt"></i> Danh Sách Gói Cày</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Tên Gói</th>
-                                    <th>Giá Tiền</th>
-                                    <th>Hành Động</th>
-                                </tr>
-                            </thead>
-                            <tbody id="packageTableBody">
-                                <tr>
-                                    <td colspan="4" class="empty-state">
-                                        <i class="fas fa-inbox"></i>
-                                        <p>Chưa có gói cày nào</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab 3: Tổng tiền -->
-            <div class="tab-content" id="tab-total">
-                <div class="total-card">
-                    <div class="total-label">
-                        <i class="fas fa-coins"></i> Tổng Tiền Đã Cày
-                    </div>
-                    <div class="total-amount" id="totalEarning">0 VNĐ</div>
-                    <p style="margin-top: 10px; color: var(--text-secondary);">
-                        Tổng số đơn: <strong id="totalOrders">0</strong>
-                    </p>
-                </div>
-
-                <div class="card" style="margin-top: 25px;">
-                    <h2><i class="fas fa-history"></i> Lịch Sử Đơn Cày</h2>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Tên TK</th>
-                                    <th>Tên Đơn</th>
-                                    <th>Giá Tiền</th>
-                                    <th>Thời Gian</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historyTableBody">
-                                <tr>
-                                    <td colspan="5" class="empty-state">
-                                        <i class="fas fa-inbox"></i>
-                                        <p>Chưa có lịch sử đơn cày</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        
+                        <div class="input-group">
+                            <input type="password" id="regConfirmPassword" placeholder="Xác nhận mật khẩu" required>
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        
+                        <button type="submit" class="btn">Đăng Ký</button>
+                        
+                        <div class="switch-text">
+                            Đã có tài khoản? <a class="switch-link" onclick="switchToLogin()">Đăng nhập</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast"></div>
+    <!-- ==================== TRANG QUẢN LÝ ==================== -->
+    <div id="mainPage">
+        <div class="top-bar">
+            <div class="user-greeting" id="userGreeting"></div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </button>
+        </div>
+
+        <!-- TỔNG TIỀN -->
+        <div class="total-bar">
+            <span class="total-label"><i class="fas fa-coins"></i> Tổng tiền đã cày</span>
+            <span class="total-amount" id="totalDisplay">0 VNĐ</span>
+        </div>
+
+        <!-- 2 CỘT -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: NHẬP ĐƠN CÀY -->
+            <div class="glass-card">
+                <div class="card-title"><i class="fas fa-plus-circle"></i> Nhập đơn cày</div>
+                <form id="orderForm">
+                    <div class="input-group">
+                        <input type="text" id="robloxUsername" placeholder="Tên đăng nhập Roblox" required>
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="robloxPassword" placeholder="Mật khẩu Roblox" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                    <div class="input-group">
+                        <select id="quickMenu" required>
+                            <option value="">-- Chọn đơn menu nhanh --</option>
+                        </select>
+                        <i class="fas fa-chevron-down input-icon"></i>
+                    </div>
+                    <!-- Tên đơn và giá tiền sẽ tự động điền khi chọn menu -->
+                    <div class="input-group">
+                        <input type="text" id="orderNameDisplay" placeholder="Tên đơn cày" readonly>
+                        <i class="fas fa-tag input-icon"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="orderPriceDisplay" placeholder="Giá tiền" readonly>
+                        <i class="fas fa-dollar-sign input-icon"></i>
+                    </div>
+                    <button type="submit" class="btn"><i class="fas fa-save"></i> Lưu đơn cày</button>
+                </form>
+            </div>
+
+            <!-- CỘT PHẢI: TẠO MENU ĐƠN -->
+            <div class="glass-card">
+                <div class="card-title"><i class="fas fa-folder-plus"></i> Tạo đơn menu</div>
+                <form id="menuForm">
+                    <div class="input-group">
+                        <input type="text" id="menuOrderName" placeholder="Nhập tên đơn" required>
+                        <i class="fas fa-pen input-icon"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="menuOrderPrice" placeholder="Nhập giá tiền đơn (VNĐ)" required min="1000" step="1000">
+                        <i class="fas fa-tag input-icon"></i>
+                    </div>
+                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Thêm vào menu</button>
+                </form>
+                <div style="margin-top: 20px;">
+                    <h4 style="color: var(--text-secondary); margin-bottom: 12px; font-weight: 500;">
+                        <i class="fas fa-list-ul"></i> Danh sách menu đơn 
+                        <span style="font-size: 0.8rem; opacity: 0.7;">(Nhấn vào thùng rác để xóa)</span>
+                    </h4>
+                    <div id="menuListContainer" style="max-height: 250px; overflow-y: auto;">
+                        <div class="empty-message">Chưa có đơn menu nào.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DANH SÁCH ĐƠN ĐÃ CÀY -->
+        <div class="glass-card">
+            <div class="card-title">
+                <i class="fas fa-history"></i> Đơn cày đã lưu 
+                <span style="font-size: 0.9rem; opacity: 0.7; font-weight: 400;">(Tổng: <span id="orderCount">0</span> đơn)</span>
+            </div>
+            <div id="orderListContainer" class="order-list">
+                <div class="empty-message">Chưa có đơn cày nào.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toastContainer"></div>
 
     <script>
-        // ============ DỮ LIỆU NGƯỜI DÙNG ============
-        // Lưu trữ tài khoản trong localStorage (demo)
-        function getUsers() {
-            const users = localStorage.getItem('cayUsers');
-            if (users) {
-                return JSON.parse(users);
-            }
-            // Tài khoản mặc định
-            const defaultUsers = [
-                { username: 'admin', password: 'admin123' }
+        (function() {
+            // ============ DỮ LIỆU ============
+            const users = [
+                { username: 'admin', password: 'admin123' },
+                { username: 'user', password: 'user123' }
             ];
-            localStorage.setItem('cayUsers', JSON.stringify(defaultUsers));
-            return defaultUsers;
-        }
 
-        function saveUsers(users) {
-            localStorage.setItem('cayUsers', JSON.stringify(users));
-        }
+            let currentUser = null;
+            let menuItems = [];
+            let orders = [];
 
-        // ============ BIẾN TOÀN CỤC ============
-        let isLoggedIn = false;
-        let currentUser = '';
+            // ============ DOM ELEMENTS ============
+            const loginPage = document.getElementById('loginPage');
+            const mainPage = document.getElementById('mainPage');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginError = document.getElementById('loginError');
+            const registerError = document.getElementById('registerError');
+            const userGreeting = document.getElementById('userGreeting');
+            const quickMenuSelect = document.getElementById('quickMenu');
+            const orderNameDisplay = document.getElementById('orderNameDisplay');
+            const orderPriceDisplay = document.getElementById('orderPriceDisplay');
+            const orderForm = document.getElementById('orderForm');
+            const menuForm = document.getElementById('menuForm');
+            const menuOrderNameInput = document.getElementById('menuOrderName');
+            const menuOrderPriceInput = document.getElementById('menuOrderPrice');
+            const menuListContainer = document.getElementById('menuListContainer');
+            const orderListContainer = document.getElementById('orderListContainer');
+            const totalDisplay = document.getElementById('totalDisplay');
+            const orderCount = document.getElementById('orderCount');
+            const toastContainer = document.getElementById('toastContainer');
 
-        // Dữ liệu đơn cày
-        let packages = JSON.parse(localStorage.getItem('cayPackages')) || [];
-        let orders = JSON.parse(localStorage.getItem('cayOrders')) || [];
+            // ============ TOAST ============
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+                toastContainer.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
 
-        // ============ AUTH TABS ============
-        document.querySelectorAll('.auth-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const targetAuth = this.getAttribute('data-auth');
+            // ============ CHUYỂN ĐỔI FORM ============
+            window.switchToRegister = function() {
+                loginForm.classList.remove('active');
+                loginForm.classList.add('inactive-left');
+                registerForm.classList.remove('inactive-right');
+                registerForm.classList.add('active');
+                registerError.style.display = 'none';
+            };
 
-                // Cập nhật trạng thái active cho tab
-                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
+            window.switchToLogin = function() {
+                registerForm.classList.remove('active');
+                registerForm.classList.add('inactive-right');
+                loginForm.classList.remove('inactive-left');
+                loginForm.classList.add('active');
+                loginError.style.display = 'none';
+            };
 
-                // Ẩn/hiện form
-                document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-                if (targetAuth === 'login') {
-                    document.getElementById('formLogin').classList.add('active');
-                    document.getElementById('loginUsername').focus();
+            // ============ RIPPLE EFFECT ============
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+
+            // ============ FOCUS EFFECT ============
+            document.querySelectorAll('input, select').forEach(el => {
+                el.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                el.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // ============ ĐĂNG NHẬP ============
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value.trim();
+
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    loginError.style.display = 'none';
+                    showMainPage();
+                    showToast('Đăng nhập thành công!', 'success');
                 } else {
-                    document.getElementById('formRegister').classList.add('active');
-                    document.getElementById('regUsername').focus();
+                    loginError.style.display = 'block';
+                }
+            });
+
+            // ============ ĐĂNG KÝ ============
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('regUsername').value.trim();
+                const password = document.getElementById('regPassword').value.trim();
+                const confirmPassword = document.getElementById('regConfirmPassword').value.trim();
+
+                if (!username || !password || !confirmPassword) {
+                    registerError.textContent = 'Vui lòng điền đầy đủ thông tin!';
+                    registerError.style.display = 'block';
+                    return;
                 }
 
-                // Xóa thông báo lỗi/thành công
-                document.querySelectorAll('.auth-error, .auth-success').forEach(el => el.classList.remove(
-                    'show'));
-            });
-        });
+                if (password !== confirmPassword) {
+                    registerError.textContent = 'Mật khẩu xác nhận không khớp!';
+                    registerError.style.display = 'block';
+                    return;
+                }
 
-        // ============ LOGIN ============
-        function handleLogin() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            const errorEl = document.getElementById('loginError');
-            const users = getUsers();
+                if (users.find(u => u.username === username)) {
+                    registerError.textContent = 'Tên đăng nhập đã tồn tại!';
+                    registerError.style.display = 'block';
+                    return;
+                }
 
-            const user = users.find(u => u.username === username && u.password === password);
+                if (password.length < 3) {
+                    registerError.textContent = 'Mật khẩu phải có ít nhất 3 ký tự!';
+                    registerError.style.display = 'block';
+                    return;
+                }
 
-            if (user) {
-                isLoggedIn = true;
-                currentUser = username;
-                errorEl.classList.remove('show');
-                document.getElementById('loginOverlay').classList.add('hidden');
-                document.getElementById('mainApp').classList.add('visible');
-                document.getElementById('currentUser').textContent = username;
-                initApp();
-                showToast('Đăng nhập thành công! Chào mừng ' + username, 'success');
-            } else {
-                errorEl.classList.add('show');
-                document.getElementById('loginPassword').value = '';
-                document.getElementById('loginPassword').focus();
-                setTimeout(() => {
-                    errorEl.classList.remove('show');
-                }, 3000);
-            }
-        }
-
-        // ============ REGISTER ============
-        function handleRegister() {
-            const username = document.getElementById('regUsername').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            const errorEl = document.getElementById('registerError');
-            const successEl = document.getElementById('registerSuccess');
-
-            // Reset thông báo
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-            errorEl.textContent = '';
-
-            // Validate
-            if (!username || username.length < 3) {
-                errorEl.textContent = 'Tên đăng nhập phải có ít nhất 3 ký tự!';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (!password || password.length < 6) {
-                errorEl.textContent = 'Mật khẩu phải có ít nhất 6 ký tự!';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (password !== confirmPassword) {
-                errorEl.textContent = 'Mật khẩu xác nhận không khớp!';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            const users = getUsers();
-            const existingUser = users.find(u => u.username === username);
-            if (existingUser) {
-                errorEl.textContent = 'Tên đăng nhập đã tồn tại! Vui lòng chọn tên khác.';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            // Thêm user mới
-            users.push({ username, password });
-            saveUsers(users);
-
-            // Hiển thị thành công
-            successEl.textContent = 'Đăng ký thành công! Đang chuyển sang đăng nhập...';
-            successEl.classList.add('show');
-
-            // Xóa form đăng ký
-            document.getElementById('regUsername').value = '';
-            document.getElementById('regPassword').value = '';
-            document.getElementById('regConfirmPassword').value = '';
-
-            // Tự động chuyển sang tab Đăng nhập sau 1.5s
-            setTimeout(() => {
-                document.querySelector('.auth-tab[data-auth="login"]').click();
-                document.getElementById('loginUsername').value = username;
-                document.getElementById('loginPassword').focus();
-                successEl.classList.remove('show');
+                users.push({ username, password });
+                registerError.style.display = 'none';
                 showToast('Đăng ký thành công! Vui lòng đăng nhập.', 'success');
-            }, 1500);
-        }
-
-        // Nhấn Enter để submit form auth
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !isLoggedIn) {
-                const activeForm = document.querySelector('.auth-form.active');
-                if (activeForm.id === 'formLogin') {
-                    handleLogin();
-                } else if (activeForm.id === 'formRegister') {
-                    handleRegister();
-                }
-            }
-        });
-
-        // Focus vào ô username khi trang load
-        window.addEventListener('load', () => {
-            document.getElementById('loginUsername').focus();
-        });
-
-        function handleLogout() {
-            if (confirm('Bạn có chắc muốn đăng xuất?')) {
-                isLoggedIn = false;
-                currentUser = '';
-                document.getElementById('loginOverlay').classList.remove('hidden');
-                document.getElementById('mainApp').classList.remove('visible');
-                document.getElementById('loginUsername').value = '';
-                document.getElementById('loginPassword').value = '';
-                document.getElementById('loginUsername').focus();
-                // Reset về tab đăng nhập
-                document.querySelector('.auth-tab[data-auth="login"]').click();
-                showToast('Đã đăng xuất!');
-            }
-        }
-
-        // ============ KHỞI TẠO APP ============
-        function initApp() {
-            createParticles();
-            renderPackageSelect();
-            renderOrderTable();
-            renderPackageTable();
-            renderHistoryTable();
-            updateTotalEarning();
-            setupTabs();
-            updateQuickPackages();
-        }
-
-        // ============ NỀN HẠT ============
-        function createParticles() {
-            const container = document.getElementById('particles');
-            container.innerHTML = '';
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                const size = Math.random() * 4 + 2;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDuration = Math.random() * 10 + 8 + 's';
-                particle.style.animationDelay = Math.random() * 8 + 's';
-                container.appendChild(particle);
-            }
-        }
-
-        // ============ TABS ============
-        function setupTabs() {
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetTab = btn.getAttribute('data-tab');
-
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        if (content.id === targetTab) {
-                            content.classList.add('active');
-                        }
-                    });
-
-                    if (targetTab === 'tab-total') {
-                        updateTotalEarning();
-                    }
-                });
+                switchToLogin();
+                document.getElementById('regUsername').value = '';
+                document.getElementById('regPassword').value = '';
+                document.getElementById('regConfirmPassword').value = '';
             });
-        }
 
-        // ============ TOAST ============
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast show ' + type;
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // ============ PACKAGE (GÓI CÀY) ============
-        function createPackage() {
-            const name = document.getElementById('packageName').value.trim();
-            const price = parseInt(document.getElementById('packagePrice').value);
-
-            if (!name) {
-                showToast('Vui lòng nhập tên gói cày!', 'error');
-                return;
-            }
-            if (!price || price <= 0) {
-                showToast('Vui lòng nhập giá tiền hợp lệ!', 'error');
-                return;
+            // ============ HIỂN THỊ TRANG CHÍNH ============
+            function showMainPage() {
+                loginPage.style.display = 'none';
+                mainPage.style.display = 'block';
+                userGreeting.innerHTML = `<i class="fas fa-user-circle"></i> Xin chào, <strong>${currentUser.username}</strong>`;
+                loadData();
+                refreshUI();
             }
 
-            const newPackage = {
-                id: Date.now(),
-                name: name,
-                price: price,
-                createdAt: new Date().toLocaleString('vi-VN')
+            // ============ ĐĂNG XUẤT ============
+            window.logout = function() {
+                if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                    currentUser = null;
+                    mainPage.style.display = 'none';
+                    loginPage.style.display = 'block';
+                    document.getElementById('loginUsername').value = '';
+                    document.getElementById('loginPassword').value = '';
+                    loginError.style.display = 'none';
+                    showToast('Đã đăng xuất!', 'success');
+                }
             };
 
-            packages.push(newPackage);
-            savePackages();
-            renderPackageSelect();
-            renderPackageTable();
-            updateQuickPackages();
-            showToast('Đã tạo gói cày: ' + name + ' - ' + price.toLocaleString() + ' VNĐ');
-
-            document.getElementById('packageName').value = '';
-            document.getElementById('packagePrice').value = '';
-        }
-
-        function deletePackage(id) {
-            if (confirm('Bạn có chắc muốn xóa gói cày này?')) {
-                packages = packages.filter(p => p.id !== id);
-                savePackages();
-                renderPackageSelect();
-                renderPackageTable();
-                updateQuickPackages();
-                showToast('Đã xóa gói cày!');
-            }
-        }
-
-        function savePackages() {
-            localStorage.setItem('cayPackages', JSON.stringify(packages));
-        }
-
-        function renderPackageSelect() {
-            const select = document.getElementById('packageSelect');
-            if (!select) return;
-            select.innerHTML = '<option value="">-- Chọn gói cày --</option>';
-
-            packages.forEach(pkg => {
-                const option = document.createElement('option');
-                option.value = pkg.id;
-                option.textContent = pkg.name + ' - ' + pkg.price.toLocaleString() + ' VNĐ';
-                option.setAttribute('data-price', pkg.price);
-                select.appendChild(option);
-            });
-        }
-
-        function updateQuickPackages() {
-            const container = document.getElementById('quickPackages');
-            if (!container) return;
-
-            container.innerHTML = '';
-            packages.forEach(pkg => {
-                const item = document.createElement('div');
-                item.className = 'quick-package-item';
-                item.innerHTML = `
-                    <div class="package-name">${pkg.name}</div>
-                    <div class="package-price">${pkg.price.toLocaleString()} VNĐ</div>
-                `;
-                item.addEventListener('click', () => {
-                    document.querySelectorAll('.quick-package-item').forEach(el => el.classList
-                        .remove('selected'));
-                    item.classList.add('selected');
-                    document.getElementById('packageSelect').value = pkg.id;
-                    document.getElementById('currentPrice').textContent = pkg.price.toLocaleString() +
-                        ' VNĐ';
-                });
-                container.appendChild(item);
-            });
-        }
-
-        function selectPackage() {
-            const select = document.getElementById('packageSelect');
-            const selectedOption = select.options[select.selectedIndex];
-            const price = selectedOption.getAttribute('data-price');
-
-            if (price) {
-                document.getElementById('currentPrice').textContent = parseInt(price).toLocaleString() + ' VNĐ';
-            } else {
-                document.getElementById('currentPrice').textContent = '0 VNĐ';
-            }
-
-            document.querySelectorAll('.quick-package-item').forEach(el => el.classList.remove('selected'));
-            if (select.value) {
-                const quickItems = document.querySelectorAll('.quick-package-item');
-                const index = packages.findIndex(p => p.id == select.value);
-                if (quickItems[index]) {
-                    quickItems[index].classList.add('selected');
+            // ============ LƯU VÀ TẢI DỮ LIỆU ============
+            function saveData() {
+                if (currentUser) {
+                    const key = `roblox_orders_${currentUser.username}`;
+                    localStorage.setItem(key + '_menu', JSON.stringify(menuItems));
+                    localStorage.setItem(key + '_orders', JSON.stringify(orders));
                 }
             }
-        }
 
-        function renderPackageTable() {
-            const tbody = document.getElementById('packageTableBody');
-            if (!tbody) return;
-            if (packages.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>Chưa có gói cày nào</p>
-                        </td>
-                    </tr>
-                `;
-                return;
+            function loadData() {
+                if (currentUser) {
+                    const key = `roblox_orders_${currentUser.username}`;
+                    const savedMenu = localStorage.getItem(key + '_menu');
+                    const savedOrders = localStorage.getItem(key + '_orders');
+                    
+                    if (savedMenu) menuItems = JSON.parse(savedMenu);
+                    if (savedOrders) orders = JSON.parse(savedOrders);
+                }
             }
 
-            tbody.innerHTML = packages.map((pkg, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td><strong>${pkg.name}</strong></td>
-                    <td><span style="color: var(--accent); font-weight: 600;">${pkg.price.toLocaleString()} VNĐ</span></td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="deletePackage(${pkg.id})">
-                            <i class="fas fa-trash"></i> Xóa
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // ============ ORDER (ĐƠN CÀY) ============
-        function createOrder() {
-            const username = document.getElementById('robloxUsername').value.trim();
-            const password = document.getElementById('robloxPassword').value.trim();
-            const orderName = document.getElementById('orderName').value.trim();
-            const packageId = document.getElementById('packageSelect').value;
-
-            if (!username) {
-                showToast('Vui lòng nhập tên tài khoản Roblox!', 'error');
-                return;
-            }
-            if (!password) {
-                showToast('Vui lòng nhập mật khẩu!', 'error');
-                return;
-            }
-            if (!orderName) {
-                showToast('Vui lòng nhập tên đơn cày!', 'error');
-                return;
-            }
-            if (!packageId) {
-                showToast('Vui lòng chọn gói cày!', 'error');
-                return;
+            // ============ HÀM HỖ TRỢ ============
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('vi-VN').format(amount) + ' VNĐ';
             }
 
-            const selectedPackage = packages.find(p => p.id == packageId);
-            if (!selectedPackage) {
-                showToast('Gói cày không hợp lệ!', 'error');
-                return;
+            function updateTotal() {
+                const total = orders.reduce((sum, order) => sum + order.price, 0);
+                totalDisplay.textContent = formatCurrency(total);
+                orderCount.textContent = orders.length;
             }
 
-            const newOrder = {
-                id: Date.now(),
-                username: username,
-                password: password,
-                orderName: orderName,
-                packageName: selectedPackage.name,
-                price: selectedPackage.price,
-                status: 'active',
-                createdAt: new Date().toLocaleString('vi-VN')
+            function renderQuickMenu() {
+                quickMenuSelect.innerHTML = '<option value="">-- Chọn đơn menu nhanh --</option>';
+                menuItems.forEach((item, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${item.name} - ${formatCurrency(item.price)}`;
+                    quickMenuSelect.appendChild(option);
+                });
+            }
+
+            function renderMenuList() {
+                if (menuItems.length === 0) {
+                    menuListContainer.innerHTML = '<div class="empty-message">Chưa có đơn menu nào.</div>';
+                    return;
+                }
+                menuListContainer.innerHTML = menuItems.map((item, index) => `
+                    <div class="order-item" style="justify-content: space-between;">
+                        <div class="order-info">
+                            <span class="order-name">${item.name}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="order-price">${formatCurrency(item.price)}</span>
+                            <button class="delete-btn" onclick="deleteMenuItem(${index})" title="Xóa menu">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function renderOrders() {
+                if (orders.length === 0) {
+                    orderListContainer.innerHTML = '<div class="empty-message">Chưa có đơn cày nào.</div>';
+                } else {
+                    orderListContainer.innerHTML = orders.map((order, index) => `
+                        <div class="order-item">
+                            <div class="order-info">
+                                <span class="order-name">${order.orderName}</span>
+                                <span class="order-account">TK: ${order.robloxUsername}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="order-price">${formatCurrency(order.price)}</span>
+                                <button class="delete-btn" onclick="deleteOrder(${index})" title="Xóa đơn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            function refreshUI() {
+                renderQuickMenu();
+                renderMenuList();
+                renderOrders();
+                updateTotal();
+            }
+
+            // ============ XÓA ĐƠN CÀY ============
+            window.deleteOrder = function(index) {
+                if (confirm('Bạn có chắc muốn xóa đơn cày này?')) {
+                    orders.splice(index, 1);
+                    saveData();
+                    refreshUI();
+                    showToast('Đã xóa đơn cày!', 'success');
+                }
             };
 
-            orders.push(newOrder);
-            saveOrders();
-            renderOrderTable();
-            renderHistoryTable();
-            updateTotalEarning();
-            showToast('Đã tạo đơn cày: ' + orderName + ' - ' + selectedPackage.price.toLocaleString() + ' VNĐ');
+            // ============ XÓA MENU ĐƠN ============
+            window.deleteMenuItem = function(index) {
+                if (confirm('Bạn có chắc muốn xóa menu đơn này? Các đơn cày đã lưu sẽ không bị ảnh hưởng.')) {
+                    menuItems.splice(index, 1);
+                    saveData();
+                    refreshUI();
+                    // Reset form nhập đơn
+                    quickMenuSelect.value = '';
+                    orderNameDisplay.value = '';
+                    orderPriceDisplay.value = '';
+                    showToast('Đã xóa menu đơn!', 'success');
+                }
+            };
 
-            document.getElementById('robloxUsername').value = '';
-            document.getElementById('robloxPassword').value = '';
-            document.getElementById('orderName').value = '';
-            document.getElementById('packageSelect').value = '';
-            document.getElementById('currentPrice').textContent = '0 VNĐ';
-            document.querySelectorAll('.quick-package-item').forEach(el => el.classList.remove('selected'));
-        }
+            // ============ CHỌN MENU NHANH -> TỰ ĐỘNG ĐIỀN ============
+            quickMenuSelect.addEventListener('change', function() {
+                const index = this.value;
+                if (index === '') {
+                    orderNameDisplay.value = '';
+                    orderPriceDisplay.value = '';
+                    return;
+                }
+                const selectedItem = menuItems[parseInt(index)];
+                if (selectedItem) {
+                    orderNameDisplay.value = selectedItem.name;
+                    orderPriceDisplay.value = formatCurrency(selectedItem.price);
+                }
+            });
 
-        function deleteOrder(id) {
-            if (confirm('Bạn có chắc muốn xóa đơn cày này?')) {
-                orders = orders.filter(o => o.id !== id);
-                saveOrders();
-                renderOrderTable();
-                renderHistoryTable();
-                updateTotalEarning();
-                showToast('Đã xóa đơn cày!');
+            // ============ FORM NHẬP ĐƠN CÀY ============
+            orderForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const robloxUsername = document.getElementById('robloxUsername').value.trim();
+                const robloxPassword = document.getElementById('robloxPassword').value.trim();
+                const quickIndex = quickMenuSelect.value;
+                const orderName = orderNameDisplay.value.trim();
+                const priceText = orderPriceDisplay.value.trim();
+
+                if (!robloxUsername || !robloxPassword) {
+                    showToast('Vui lòng nhập tên đăng nhập và mật khẩu Roblox!', 'error');
+                    return;
+                }
+                if (!orderName || !priceText) {
+                    showToast('Vui lòng chọn đơn menu nhanh!', 'error');
+                    return;
+                }
+
+                // Lấy số tiền từ chuỗi format
+                const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+                if (isNaN(price) || price <= 0) {
+                    showToast('Giá tiền không hợp lệ!', 'error');
+                    return;
+                }
+
+                orders.push({
+                    robloxUsername,
+                    robloxPassword,
+                    orderName,
+                    price
+                });
+
+                // Reset form
+                document.getElementById('robloxUsername').value = '';
+                document.getElementById('robloxPassword').value = '';
+                quickMenuSelect.value = '';
+                orderNameDisplay.value = '';
+                orderPriceDisplay.value = '';
+                
+                saveData();
+                refreshUI();
+                showToast(`Đã lưu đơn cày "${orderName}" thành công!`, 'success');
+            });
+
+            // ============ FORM TẠO MENU ĐƠN ============
+            menuForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = menuOrderNameInput.value.trim();
+                const price = parseInt(menuOrderPriceInput.value);
+
+                if (!name) {
+                    showToast('Vui lòng nhập tên đơn!', 'error');
+                    return;
+                }
+                if (isNaN(price) || price <= 0) {
+                    showToast('Vui lòng nhập giá tiền hợp lệ!', 'error');
+                    return;
+                }
+
+                // Kiểm tra trùng tên
+                if (menuItems.find(item => item.name.toLowerCase() === name.toLowerCase())) {
+                    showToast('Tên đơn menu đã tồn tại!', 'error');
+                    return;
+                }
+
+                menuItems.push({ name, price });
+                menuForm.reset();
+                saveData();
+                refreshUI();
+                showToast(`Đã thêm menu "${name}" thành công!`, 'success');
+            });
+
+            // ============ KIỂM TRA ĐĂNG NHẬP KHI TẢI TRANG ============
+            const savedUser = localStorage.getItem('roblox_current_user');
+            if (savedUser) {
+                const user = users.find(u => u.username === savedUser);
+                if (user) {
+                    currentUser = user;
+                    showMainPage();
+                }
             }
-        }
 
-        function saveOrders() {
-            localStorage.setItem('cayOrders', JSON.stringify(orders));
-        }
+            // Lưu user khi đăng nhập
+            const originalShowMainPage = showMainPage;
+            showMainPage = function() {
+                originalShowMainPage();
+                if (currentUser) {
+                    localStorage.setItem('roblox_current_user', currentUser.username);
+                }
+            };
 
-        function renderOrderTable() {
-            const tbody = document.getElementById('orderTableBody');
-            if (!tbody) return;
-            const activeOrders = orders.filter(o => o.status === 'active');
-
-            if (activeOrders.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>Chưa có đơn cày nào</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tbody.innerHTML = activeOrders.map((order, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td><strong>${order.username}</strong></td>
-                    <td>${order.orderName}</td>
-                    <td><span style="color: var(--accent); font-weight: 600;">${order.price.toLocaleString()} VNĐ</span></td>
-                    <td><span class="status-active">Đang chạy</span></td>
-                    <td>${order.createdAt}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">
-                            <i class="fas fa-trash"></i> Xóa
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function renderHistoryTable() {
-            const tbody = document.getElementById('historyTableBody');
-            if (!tbody) return;
-
-            if (orders.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <p>Chưa có lịch sử đơn cày</p>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tbody.innerHTML = orders.map((order, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td><strong>${order.username}</strong></td>
-                    <td>${order.orderName}</td>
-                    <td><span style="color: var(--accent); font-weight: 600;">${order.price.toLocaleString()} VNĐ</span></td>
-                    <td>${order.createdAt}</td>
-                </tr>
-            `).join('');
-        }
-
-        // ============ TỔNG TIỀN ============
-        function updateTotalEarning() {
-            const total = orders.reduce((sum, order) => sum + order.price, 0);
-            const totalEarningEl = document.getElementById('totalEarning');
-            const headerTotalEl = document.getElementById('headerTotal');
-            const totalOrdersEl = document.getElementById('totalOrders');
-
-            if (totalEarningEl) totalEarningEl.textContent = total.toLocaleString() + ' VNĐ';
-            if (headerTotalEl) headerTotalEl.textContent = total.toLocaleString() + ' VNĐ';
-            if (totalOrdersEl) totalOrdersEl.textContent = orders.length;
-        }
+            // Xóa khi đăng xuất
+            const originalLogout = window.logout;
+            window.logout = function() {
+                localStorage.removeItem('roblox_current_user');
+                originalLogout();
+            };
+        })();
     </script>
 </body>
 </html>
